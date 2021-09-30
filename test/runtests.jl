@@ -22,12 +22,12 @@ using Test
     @test typeof(y_hat) == Array{Float64,2}
     @test typeof(se_hat) == NamedTuple{(:coef, :se, :t, :p),
                                        Tuple{Array{Float64,2},
-                                       Array{Float64,1},
-                                       Array{Float64,2},
-                                       Array{Float64,2}}}
+                                             Array{Float64,1},
+                                             Array{Float64,2},
+                                             Array{Float64,2}}}
     @test typeof(se_hc_hat) == NamedTuple{(:coef, :se, :t, :p),
                                           Tuple{Array{Float64,2},
-                                          Array{Float64,1},
-                                          Array{Float64,2},
-                                          Array{Float64,2}}}
+                                                Array{Float64,1},
+                                                Array{Float64,2},
+                                                Array{Float64,2}}}
 end
