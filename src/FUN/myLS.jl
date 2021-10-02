@@ -3,7 +3,7 @@ myLS(y, X)
 
 A simple least squares implementation.
 """
-struct myLS
+struct myLS <: myEstimators
     β::Array{Float64} # coefficient
     y::Array{Float64} # response
     X::Array{Float64} # features
@@ -21,32 +21,21 @@ end #MYLS
 
 # Methods ======================================================================
 """
-coef(fit::myLS)
-
-A method to retrieve the coefficient from a myLS object.
-"""
-function coef(fit::myLS)
-    return fit.β
-end #COEF.MYLS
-
-"""
 predict(fit::myLS; data)
 
 A method to calculate predictions of a myLS object.
 """
-function predict(fit::myLS; data = nothing)
+function predict(fit::myLS, data::Array{Float64})
     # Return predicted values
-    if isnothing(data)
-        return fit.X * fit.β
-    else
-        return data * fit.β
-    end
+    return data * fit.β
 end #PREDICT.MYLS
 
 """
 inference(fit::myLS; heteroskedastic, print_df)
 
 A method to calculate standard errors of a myLS object.
+
+To do: clustered se
 """
 function inference(fit::myLS; heteroskedastic::Bool=false, print_df::Bool=true)
     # Obtain data parameters
@@ -79,6 +68,6 @@ function inference(fit::myLS; heteroskedastic::Bool=false, print_df::Bool=true)
         display(out_df)
     end
     # Organize and return output
-    output = (coef = fit.β, se = se, t = t_stat, p = p_val)
+    output = (β = fit.β, se = se, t = t_stat, p = p_val)
     return output
 end #INFERENCE.MYLS
