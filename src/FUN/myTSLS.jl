@@ -11,7 +11,8 @@ struct myTSLS <: myEstimators
 	FS::Array{Float64} # first stage coefficients
 
 	# Define constructor function
-	function myTSLS(y, D, instrument, control = nothing)
+	function myTSLS(y::Array{Float64}, D::Array{Float64},
+                    instrument::Array{Float64}, control = nothing)
         # Add constant if no control is passed
         if isnothing(control) control = ones(length(y)) end
 
@@ -34,16 +35,6 @@ struct myTSLS <: myEstimators
 end #MYTSLS
 
 # Methods ======================================================================
-"""
-predict(fit::myTSLS; data)
-
-A method to calculate predictions of a myTSLS object.
-"""
-function predict(fit::myTSLS, data::Array{Float64})
-    # Return predicted values
-    return data * fit.β
-end #PREDICT.MYTSLS
-
 """
 inference(fit::myLS; heteroskedastic, print_df)
 

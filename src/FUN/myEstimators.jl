@@ -20,7 +20,8 @@ predict(fit::myEstimators)
 
 A method to calculate predictions of a myEstimators object.
 """
-function predict(fit::myEstimators)
-    # Return predicted values
-    return predict(fit, fit.X)
+function predict(fit::myEstimators, data = nothing)
+  # Calculate and return predictions
+  isnothing(data) ? fitted = fit.X * fit.β : fitted = data * fit.β
+  return(fitted)
 end #PREDICT.MYESTIMATORS

@@ -21,16 +21,6 @@ end #MYLS
 
 # Methods ======================================================================
 """
-predict(fit::myLS; data)
-
-A method to calculate predictions of a myLS object.
-"""
-function predict(fit::myLS, data::Array{Float64})
-    # Return predicted values
-    return data * fit.β
-end #PREDICT.MYLS
-
-"""
 inference(fit::myLS; heteroskedastic, print_df)
 
 A method to calculate standard errors of a myLS object.
