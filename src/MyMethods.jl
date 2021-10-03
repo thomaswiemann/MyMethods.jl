@@ -8,12 +8,12 @@ using DataFrames
 
 # Module export ================================================================
 
-export myEstimators, myLS, myTSLS
+export myEstimator, myLS, myTSLS
 export coef, predict, inference # my methods
 
 # Module content ===============================================================
 
-include("FUN/myEstimators.jl") # myEstimators
+include("FUN/myEstimator.jl") # myEstimators
 
 include("FUN/myLS.jl") # myLS
 

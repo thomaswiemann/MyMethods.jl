@@ -3,7 +3,7 @@ myTSLS(y, D, instrument, control)
 
 A simple two stage least squares implementation.
 """
-struct myTSLS <: myEstimators
+struct myTSLS <: myEstimator
     β::Array{Float64} # coefficient
     y::Array{Float64} # response
 	Z::Array{Float64} # combined first stage variables
@@ -46,17 +46,15 @@ function inference(fit::myTSLS; heteroskedastic::Bool=false, cluster=nothing,
     print_df::Bool=true)
     # Obtain data parameters
     N = length(fit.y)
-
-	# Define sample matrices
-	Z = fit.Z; Kz = size(Z, 2)
-	X = fit.X; Kx = size(X, 2)
-	u = fit.y - predict(fit) # residuals
+    Kx = size(fit.X, 2)
+    Kz = size(fit.Z, 2)
 
 	# Calculate matrix products
-	PZ = Z * fit.FS
+	PZ = fit.Z * fit.FS
 	PZZPinv = inv(PZ' * PZ)
 
 	# Calculate covariance matrix
+    u = fit.y - predict(fit) # residuals
 	if !heteroskedastic
 		# Covariance under homoskedasticity
 		covar = sum(u.^2) .* PZZPinv ./ (N - Kz)
@@ -66,10 +64,8 @@ function inference(fit::myTSLS; heteroskedastic::Bool=false, cluster=nothing,
 		covar = PZZPinv * PZuuZP * PZZPinv
 	end
 
-	# Get standard errors
+	# Get standard errors, t-statistics and p-values
     se = sqrt.(covar[diagind(covar)])
-
-    # Calculate t-statistic and p-values
     t_stat = fit.β ./ se
     p_val = 2 * cdf.(Normal(), -abs.(t_stat))
 
@@ -79,6 +75,7 @@ function inference(fit::myTSLS; heteroskedastic::Bool=false, cluster=nothing,
         rename!(out_df, ["coef", "se", "t-stat", "p-val"])
         display(out_df)
     end
+
     # Organize and return output
     output = (β = fit.β, se = se, t = t_stat, p = p_val)
     return output
