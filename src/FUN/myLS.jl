@@ -56,7 +56,7 @@ function inference(fit::myLS; heteroskedastic::Bool=false, print_df::Bool=true)
         rename!(out_df, ["coef", "se", "t-stat", "p-val"])
         display(out_df)
     end
-    
+
     # Organize and return output
     output = (β = fit.β, se = se, t = t_stat, p = p_val)
     return output
