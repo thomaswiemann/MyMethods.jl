@@ -11,11 +11,11 @@ struct myLS <: myEstimator
     # Define constructor function
     function myLS(y::Array{Float64}, X::Array{Float64})
 
-    # Calculate LS
-    β = (X' * X) \ (X' * y)
+        # Calculate LS
+        β = (X' * X) \ (X' * y)
 
-    # Organize and return output
-    new(β, y, X)
+        # Organize and return output
+        new(β, y, X)
     end #MYLS
 end #MYLS
 
