@@ -22,7 +22,12 @@ struct myIVBound
     end #MYIVBOUND
 end #MYIVBOUND
 
+# Methods ======================================================================
+"""
+coef(fit::myIVBound, s, t)
 
+Function to calculate the upper bound via Monotone Instrumental Variables.
+"""
 function coef(fit::myIVBound, s, t)
     Eyx_px = fit.Eyx .* fit.px
 

@@ -64,3 +64,21 @@ end
                                                 Array{Float64,2},
                                                 Array{Float64,2}}}
 end
+
+@testset "mySieve.jl" begin
+      # Generate example data
+      n_i = 1000
+      x = randn(n_i)
+      X = get_basis(x, "Bernstein", 5, nothing)
+      y = X * randn(6) + randn((n_i, 1))
+  
+      # Estimate the sieve regression
+      sieve_fit = mySieve(y, x; basis="Bernstein", K=5)
+
+      # Check the methods
+      β_hat = coef(sieve_fit)
+      y_hat = predict(sieve_fit)
+
+      # Let's check that everything is of correct type.
+      @test typeof(sieve_fit) == mySieve
+end
