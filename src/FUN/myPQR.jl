@@ -52,8 +52,10 @@ struct myPQR
         if unique(x_o) != nobs
             unq_x = unique(x_o)
             n_unq_x = length(unq_x)
+            unq_indices = zeros(Int64, n_unq_x, 1)
             for j in 1:n_unq_x
                 is_x_j = findall(x_o .== unq_x[j])
+                unq_indices[j] = is_x_j[1]
                 # Check whether value is no point mass
                 if length(is_x_j) == 1
                     continue
@@ -74,10 +76,12 @@ struct myPQR
 
         # Define the check-loss function
         if isnothing(weights)
-            weights = 1
+            weights_o = 1
+        else 
+            weights_o = weights[obs_order]
         end
         @objective(lp_model, Min, 
-            sum(weights .* (τ * uv[1:nobs, 1] + (1 - τ) * uv[1:nobs, 2])) + 
+            sum(weights_o .* (τ * uv[1:nobs, 1] + (1 - τ) * uv[1:nobs, 2])) + 
             λ * sum(V))
 
         # Surpress output and solve the linear program
@@ -85,7 +89,12 @@ struct myPQR
         optimize!(lp_model)
 
         # Set α
-        α = value.(lp_model[:α])
+        if unique(x_o) == nobs
+            α = value.(lp_model[:α])
+        else
+            α = value.(lp_model[:α])[unq_indices]
+        end
+        
 
         # (Optional) Set β
         if no_control
@@ -95,6 +104,6 @@ struct myPQR
         end
 
         # Define output
-        new(α, y, x, τ, λ, β, control, lp_model, weights)
+        new(α, y_o, x_o, τ, λ, β, control_o, lp_model, weights_o)
     end #MYPQR
 end #MYPQR
