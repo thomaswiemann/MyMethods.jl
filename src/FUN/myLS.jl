@@ -7,15 +7,21 @@ struct myLS <: myEstimator
     β::Array{Float64} # coefficient
     y::Array{Float64} # response
     X::Array{Float64} # features
+    weights # (Optional) weights
 
     # Define constructor function
-    function myLS(y::Array{Float64}, X::Array{Float64})
+    function myLS(y::Array{Float64}, X::Array{Float64}; weights = nothing)
 
-        # Calculate LS
-        β = (X' * X) \ (X' * y)
+        # Calculate LS (or weighted LS)
+        if isnothing(weights)
+            β = (X' * X) \ (X' * y)
+        else
+            XW = X .* weights
+            β = (XW' * X) \ (XW' * y)
+        end
 
         # Organize and return output
-        new(β, y, X)
+        new(β, y, X, weights)
     end #MYLS
 end #MYLS
 

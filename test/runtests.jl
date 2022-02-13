@@ -6,9 +6,11 @@ using Test
     n_i = 1000
     X = 2 * randn((n_i, 2))
     y = X * [1, -2] + randn((n_i, 1))
+    w = rand(n_i)
+    w = w ./ sum(w)
 
     # Estimate the least square regression
-    ls_fit = myLS(y, X)
+    ls_fit = myLS(y, X, weights = w)
 
     # Check the methods
     β_hat = coef(ls_fit)
@@ -99,3 +101,22 @@ end
       # Let's check that everything is of correct type.
       @test typeof(qr_fit) == myQR
 end
+
+@testset "myLLR.jl" begin
+      # Generate example data
+      n_i = 1000
+      x = 2 * randn((n_i, 1))
+      y = log.(x.^2) + randn((n_i, 1))
+      w = rand(n_i)
+      w = w ./ sum(w)
+  
+      # Estimate the least square regression
+      llr_fit = myLLR(y, x, x[1], 2, 0.5)
+  
+      # Check the methods
+      β_hat = coef(llr_fit)
+      y_hat = predict(llr_fit)
+  
+      # Let's check that everything is of correct type.
+      @test typeof(llr_fit) == myLLR
+  end
