@@ -34,8 +34,10 @@ function coef(fit::myIVBound, s, t)
     from_t = fit.unq_x .> t
     until_s = fit.unq_x .< s
     
-    ub = sum(Eyx_px[from_t]) + (fit.Eyx[fit.unq_x .== t] * sum(fit.px[.!from_t]))[1]
-    lb = sum(Eyx_px[until_s]) + (fit.Eyx[fit.unq_x .== s] * sum(fit.px[.!until_s]))[1]
+    ub = sum(Eyx_px[from_t]) + 
+        (fit.Eyx[fit.unq_x .== t] * sum(fit.px[.!from_t]))[1]
+    lb = sum(Eyx_px[until_s]) + 
+        (fit.Eyx[fit.unq_x .== s] * sum(fit.px[.!until_s]))[1]
     
     return ub - lb
 end

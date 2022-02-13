@@ -82,3 +82,20 @@ end
       # Let's check that everything is of correct type.
       @test typeof(sieve_fit) == mySieve
 end
+
+@testset "myQR.jl" begin
+      # Generate example data
+      n_i = 1000
+      X = randn(n_i, 2)
+      y = X * [0.5, -0.5] + randn((n_i, 1))
+  
+      # Estimate the quantile regression regression
+      qr_fit = myQR(y, X, 0.5)
+
+      # Check the methods
+      β_hat = coef(qr_fit)
+      y_hat = predict(qr_fit)
+
+      # Let's check that everything is of correct type.
+      @test typeof(qr_fit) == myQR
+end
