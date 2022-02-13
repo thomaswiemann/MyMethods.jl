@@ -1,5 +1,5 @@
 """
-myLQR(y, x, x0, K, h, τ = 0.5; kernel = "Epanechnikov", control = nothing)
+myLQR(y, x, x0, K, h; τ = 0.5, kernel = "Epanechnikov", control = nothing)
 
 A local quantile regression implementation.
 """
@@ -12,12 +12,12 @@ struct myLQR <: myEstimator
     K # degree of local linear regression
 	h # bandwidth
     kernel # kernel function
-	control # additional variables included in LLR
+	control # additional variables included in LQR
     τ # quantile
     lp_model # a JuMP model 
     
     # Define constructor function
-    function myLQR(y, x, x0, K, h, τ = 0.5; 
+    function myLQR(y, x, x0, K, h; τ = 0.5, 
         kernel = "Epanechnikov", control = nothing)	
 
         # Calculate kernel weights
@@ -32,7 +32,7 @@ struct myLQR <: myEstimator
         end
 
         # Calculate weighted least squares fit
-        qr_fit = myQR(y, X, τ, weights = w)
+        qr_fit = myQR(y, X, τ = τ, weights = w)
         β = qr_fit.β
         lp_model = qr_fit.lp_model
 

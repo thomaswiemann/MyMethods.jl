@@ -92,7 +92,7 @@ end
       y = X * [0.5, -0.5] + randn((n_i, 1))
   
       # Estimate the quantile regression regression
-      qr_fit = myQR(y, X, 0.5)
+      qr_fit = myQR(y, X, τ = 0.5)
 
       # Check the methods
       β_hat = coef(qr_fit)
@@ -141,14 +141,16 @@ end
   @testset "myPQR.jl" begin
       # Generate example data
       n_i = 1000
-      x = 2 * randn((n_i, 1))
-      y = log.(x.^2) + randn((n_i, 1))
+      x = 2 * (randn((n_i, 1)) .<= 0) .+ 1
+      X = randn((n_i, 3))
+      y = log.(x.^2) + X * [1, 1, 1] + randn((n_i, 1))
   
       # Estimate the least square regression
-      lqr_fit = myPQR(y, x, 1, 0.2)
+      lqr_fit = myPQR(y, x, 1, control = X)
 
       # Check the methods
       α_hat = lqr_fit.α
+      β_hat = lqr_fit.β
   
       # Let's check that everything is of correct type.
       @test typeof(lqr_fit) == myPQR

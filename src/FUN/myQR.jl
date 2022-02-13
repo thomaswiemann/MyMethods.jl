@@ -13,7 +13,7 @@ struct myQR <: myEstimator
     lp_model # a JuMP model 
     weights # (Optional) vector of weights for loss function
 
-    function myQR(y, X, τ = 0.5; weights = nothing)
+    function myQR(y, X; τ = 0.5, weights = nothing)
         
         # Data parameters
         nobs = length(y)
