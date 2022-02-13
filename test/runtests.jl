@@ -120,3 +120,20 @@ end
       # Let's check that everything is of correct type.
       @test typeof(llr_fit) == myLLR
   end
+
+  @testset "myLQR.jl" begin
+      # Generate example data
+      n_i = 1000
+      x = 2 * randn((n_i, 1))
+      y = log.(x.^2) + randn((n_i, 1))
+  
+      # Estimate the least square regression
+      lqr_fit = myLQR(y, x, x[1], 2, 0.5)
+  
+      # Check the methods
+      β_hat = coef(lqr_fit)
+      y_hat = predict(lqr_fit)
+  
+      # Let's check that everything is of correct type.
+      @test typeof(lqr_fit) == myLQR
+  end

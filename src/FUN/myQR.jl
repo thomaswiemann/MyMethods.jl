@@ -35,7 +35,7 @@ struct myQR <: myEstimator
             weights = 1
         end
         @objective(lp_model, Min, 
-            weights * (τ * sum(uv[1:nobs, 1]) + (1 - τ) * sum(uv[1:nobs, 2])))
+            sum(weights .* (τ * uv[1:nobs, 1] + (1 - τ) * uv[1:nobs, 2])))
 
         # Surpress output and solve the linear program
         MOI.set(lp_model, MOI.Silent(), true)
