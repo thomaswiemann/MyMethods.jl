@@ -50,7 +50,7 @@ struct myPQR
         # Check for uniqueness of x_o. Define additional constraints if x_o is
         #     not unique.
         if unique(x_o) != nobs
-            unq_x = unique(x_o)
+            unq_x = sort(unique(x_o))
             n_unq_x = length(unq_x)
             unq_indices = zeros(Int64, n_unq_x, 1)
             for j in 1:n_unq_x
