@@ -39,6 +39,7 @@ struct myPQR
         if no_control
             @constraint(lp_model, c[i = 1:nobs], 
                 α[i] + uv[i, 1] - uv[i, 2] == y_o[i])
+            control_o = nothing
         else
             control_o = control[obs_order, :]
             n_control = size(control_o, 2)
