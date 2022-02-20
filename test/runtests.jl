@@ -155,3 +155,38 @@ end
       # Let's check that everything is of correct type.
       @test typeof(lqr_fit) == myPQR
   end
+
+  @testset "myMTA.jl" begin
+      # Generate example data
+      n_i = 1000
+      J = 5
+      X = randn((n_i, J - 1, 3))
+      mu = zeros((n_i, J - 1))
+      for j in 1:(J - 1)
+            mu[:, j] = X[:, j, :] * [1, 1, 1]
+      end
+      mu = exp.(mu)
+      CCP = mu ./ (1 .+ sum(mu, dims = 2))
+      CCP = hcat(1 .- sum(CCP, dims = 2), CCP)
+
+      
+
+
+
+      wsample(collect(1:J), CCP[1, :], 5)
+      y = mapslices(x -> wsample(collect(1:J), x), CCP, dims = 2)
+
+      mu = X .* [1, 1, 1]
+      CCP = exp.(mu)
+      y = log.(x.^2) + X * [1, 1, 1] + randn((n_i, 1))
+  
+      # Estimate the least square regression
+      lqr_fit = myPQR(y, x, 1, control = X)
+
+      # Check the methods
+      α_hat = lqr_fit.α
+      β_hat = lqr_fit.β
+  
+      # Let's check that everything is of correct type.
+      @test typeof(lqr_fit) == myPQR
+  end
