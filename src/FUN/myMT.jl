@@ -14,35 +14,37 @@ struct myMTA <: myEstimator
 
     function myMTA(y, X; τ = 0.5, weights = nothing)
         
+
+        ccp 
+
         # Data parameters
-        nobs = length(y)
-        nX = size(X, 2)
+        J = length(ccp)
+
+        S = 1000
+        μ = -0.57721
+        σ = 1
+        ϵ = rand(GeneralizedExtremeValue(μ, σ, 0), (S, J))
 
         # Initialize the linear program
         lp_model = Model(GLPK.Optimizer)
 
         # Initialize decision variables
-        @variable(lp_model, uv[1:nobs, 1:2] >= 0) # residuals
-        @variable(lp_model, β_τ[1:nX])
+        @variable(lp_model, λ[1:J]) 
+        @variable(lp_model, z[1:S])
 
         # Formulate constraint
-        @constraint(lp_model, c[i = 1:nobs], 
-            X[i, :]' * β_τ + uv[i, 1] - uv[i, 2] == y[i])
+        @constraint(lp_model, c[s = 1:S, j = 1:J], 
+            λ[j] + z[s] >= ϵ[s, j])
 
-        # Define the check-loss function
-        if isnothing(weights)
-            weights = 1
-        end
-        @objective(lp_model, Min, 
-            sum(weights .* (τ * uv[1:nobs, 1] + (1 - τ) * uv[1:nobs, 2])))
+        # Define the objective function
+        @objective(lp_model, Min, sum(ccp .* λ) + mean(z))
 
         # Surpress output and solve the linear program
         MOI.set(lp_model, MOI.Silent(), true)
         optimize!(lp_model)
 
         # Set β
-        β = value.(lp_model[:β_τ])
-
+        w = value.(lp_model[:λ]) .+ mean(value.(lp_model[:z]))
         # Define output
         new(β, y, X, τ, lp_model, weights)
     end #MYMTA
