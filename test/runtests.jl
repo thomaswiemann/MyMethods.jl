@@ -158,20 +158,23 @@ end
 
   @testset "myMTA.jl" begin
       # Generate example data
-      n_i = 1000
-      J = 5
-      X = randn((n_i, J - 1, 3))
-      mu = zeros((n_i, J - 1))
-      for j in 1:(J - 1)
-            mu[:, j] = X[:, j, :] * [1, 1, 1]
+      T = 100
+      J = 3
+      X = randn((T, J, 2))
+      mu = zeros((T, J))
+      for j in 1:(J )
+            mu[:, j] = j .+ X[:, j, :] * [1, -1]
       end
       mu = exp.(mu)
       CCP = mu ./ (1 .+ sum(mu, dims = 2))
-      CCP = hcat(1 .- sum(CCP, dims = 2), CCP)
 
       
+      ccp = CCP[1, :]
 
 
+      μ = -0.57721
+        σ = 1
+        P = GeneralizedExtremeValue(μ, σ, 0)
 
       wsample(collect(1:J), CCP[1, :], 5)
       y = mapslices(x -> wsample(collect(1:J), x), CCP, dims = 2)
