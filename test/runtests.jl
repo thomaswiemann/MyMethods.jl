@@ -168,13 +168,10 @@ end
       mu = exp.(mu)
       CCP = mu ./ (1 .+ sum(mu, dims = 2))
 
-      
-      ccp = CCP[1, :]
-
 
       μ = -0.57721
         σ = 1
-        P = GeneralizedExtremeValue(μ, σ, 0)
+        Q = GeneralizedExtremeValue(μ, σ, 0)
 
       wsample(collect(1:J), CCP[1, :], 5)
       y = mapslices(x -> wsample(collect(1:J), x), CCP, dims = 2)
