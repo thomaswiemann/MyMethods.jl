@@ -10,7 +10,7 @@ using GLPK
 
 # Module export ================================================================
 
-export myEstimator, myLS, myTSLS, mySieve, myQR, myLLR, myLQR, myPQR
+export myEstimator, myLS, myTSLS, mySieve, myQR, myLLR, myLQR, myPQR, myMTA
 export coef, predict, inference # my methods
 export get_basis, get_kw, get_Silverman # helper functions
 
@@ -31,5 +31,7 @@ include("FUN/myLLR.jl") # myLLR
 include("FUN/myLQR.jl") # myLQR
 
 include("FUN/myPQR.jl") # myPQR
+
+include("FUN/myMTA.jl") # myMTA
 
 end

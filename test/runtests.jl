@@ -157,8 +157,8 @@ end
   end
 
   @testset "myMTA.jl" begin
-      # Generate example data
-      T = 100
+      # Generate example data and calculate conditional choice probabilities 
+      T = 10
       J = 3
       X = randn((T, J, 2))
       mu = zeros((T, J))
@@ -168,25 +168,16 @@ end
       mu = exp.(mu)
       CCP = mu ./ (1 .+ sum(mu, dims = 2))
 
+      # Define error distribution
+      Q = GeneralizedExtremeValue(-0.57721, 1, 0)
 
-      μ = -0.57721
-        σ = 1
-        Q = GeneralizedExtremeValue(μ, σ, 0)
-
-      wsample(collect(1:J), CCP[1, :], 5)
-      y = mapslices(x -> wsample(collect(1:J), x), CCP, dims = 2)
-
-      mu = X .* [1, 1, 1]
-      CCP = exp.(mu)
-      y = log.(x.^2) + X * [1, 1, 1] + randn((n_i, 1))
-  
-      # Estimate the least square regression
-      lqr_fit = myPQR(y, x, 1, control = X)
+      # Estimate mass transport problem
+      mta_fit = myMTA(CCP, X, Q; S = 10)
 
       # Check the methods
-      α_hat = lqr_fit.α
-      β_hat = lqr_fit.β
+      α_hat = mta_fit.α
+      β_hat = mta_fit.β
   
       # Let's check that everything is of correct type.
-      @test typeof(lqr_fit) == myPQR
+      @test typeof(mta_fit) == myMTA
   end
