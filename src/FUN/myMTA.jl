@@ -57,7 +57,7 @@ end #MYMTA
 
 # Helper Functions =============================================================
 """
-get_mtabounds(ccp, ϵ, ∂Gstar; S = 100)
+get_mtabounds(fit::myMTA)
 
 An implementation of the Mass Transport Approach proposed in  Chiong, Galichon, 
     & Shum (2016) based on Theorem 4. 
