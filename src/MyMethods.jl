@@ -12,7 +12,7 @@ using GLPK
 
 export myEstimator, myLS, myTSLS, mySieve, myQR, myLLR, myLQR, myPQR, myMTA
 export coef, predict, inference # my methods
-export get_basis, get_kw, get_Silverman # helper functions
+export get_basis, get_kw, get_Silverman, get_mtabounds # helper functions
 
 # Module content ===============================================================
 

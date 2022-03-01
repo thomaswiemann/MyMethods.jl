@@ -158,25 +158,25 @@ end
 
   @testset "myMTA.jl" begin
       # Generate example data and calculate conditional choice probabilities 
-      T = 10
       J = 3
-      X = randn((T, J, 2))
+      x = collect(1:1:10)
+      T = length(x)
       mu = zeros((T, J))
-      for j in 1:(J )
-            mu[:, j] = j .+ X[:, j, :] * [1, -1]
-      end
+
+      mu[:, 1] .= 0
+      mu[:, 2] = sqrt.(x)
+      mu[:, 3] = log.(x)
+
       mu = exp.(mu)
-      CCP = mu ./ (1 .+ sum(mu, dims = 2))
+      CCP = mu ./ (sum(mu, dims = 2))
 
       # Define error distribution
       Q = GeneralizedExtremeValue(-0.57721, 1, 0)
 
-      # Estimate mass transport problem
-      mta_fit = myMTA(CCP, X, Q; S = 10)
+      ccp = CCP[1, :]
 
-      # Check the methods
-      α_hat = mta_fit.α
-      β_hat = mta_fit.β
+      mta_fit = myMTA(ccp, Q; S = 1000)
+      bounds = get_mtabounds(mta_fit)
   
       # Let's check that everything is of correct type.
       @test typeof(mta_fit) == myMTA
